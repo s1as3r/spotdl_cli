@@ -4,25 +4,27 @@ from os import system
 def song():
     link = input("Enter the song link or enter song name: ")
     log = input("Log Level (INFO/DEBUG) = ")
+    filetype = input("Output File Type? (m4a,ogg,mp3,opus,flac): ")
     if_output = input("Manual output directory(y/n)?: ")
     if if_output.lower() == 'y':
         output = input("Enter The Output Directory: ")
         if_search = input("Manual Search String (y/n): ")
         if if_search.lower() == 'n':
-            system(f"spotdl -s {link} -f {output} --log-level={log.upper()}")
+            system(f"spotdl -s {link} -f {output} --log-level={log.upper()} -o {filetype}")
         elif if_search.lower() == 'y':
             search = input("Enter the search string: ")
-            system(f"spotdl -s {link} -f {output} --log-level={log.upper()} -sf{search}")
+            system(f"spotdl -s {link} -f {output} --log-level={log.upper()} -sf{search} -o {filetype}")
         else:
             print("Invalid Option Selected.")
 
     elif if_output.lower() == 'n':
         if_search = input("Manual Search String (y/n): ")
+        filetype = input("Output File Type? (m4a,ogg,mp3,opus,flac): ")
         if if_search.lower() == 'n':
-            system(f"spotdl -s {link} --log-level={log.upper()}")
+            system(f"spotdl -s {link} --log-level={log.upper()} -o {filetype}")
         elif if_search.lower() == 'y':
             search = input("Enter the search string: ")
-            system(f"spotdl -s {link} --log-level={log.upper()} -sf {search}")
+            system(f"spotdl -s {link} --log-level={log.upper()} -sf {search} -o {filetype}")
         else:
             print("Invalid Option Selected..")
     else:
@@ -32,12 +34,13 @@ def song():
 def playlist():
     link = input("Enter the playlist link: ")
     log = input("Log Level (INFO/DEBUG) = ")
+    filetype = input("Output File Type? (m4a,ogg,mp3,opus,flac): ")
     if_output = input("Manual output directory(y/n)?: ")
     if if_output.lower() == 'y':
         output = input("Enter The Output Directory: ")
-        system(f"spotdl -p {link} --log-level={log.upper()} -f {output}")
+        system(f"spotdl -p {link} --log-level={log.upper()} -f {output} -o {filetype}")
     elif if_output.lower() == 'n':
-        system(f"spotdl -p {link} --log-level={log.upper()}")
+        system(f"spotdl -p {link} --log-level={log.upper()} -o {filetype}")
     else:
         print("Invalid Option Selected..")
 
@@ -45,7 +48,8 @@ def playlist():
 def textlist():
     path = str(input("Enter the Path to the list: "))
     log = input("Log Level (INFO/DEBUG): ")
-    system(f"spotdl -l {path} --log-level={log.upper()}")
+    filetype = input("Output File Type? (m4a,ogg,mp3,opus,flac): ")
+    system(f"spotdl -l {path} --log-level={log.upper()} -o {filetype}")
 
 
 def main():
