@@ -8,5 +8,5 @@ spotify-downloader can be installed via pip with: <br />
 Run the script and enter the data that is asked.
 
 # Note
-This script is not optimised that well, I created it under 20 minutes.
+This script might need some optimisations, I created it under 20 minutes.
 Please report bugs.
