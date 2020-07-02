@@ -49,7 +49,7 @@ def textlist():
 
 
 def main():
-    selection = input("What do you want to download:\n "
+    selection = input("What do you want to download:\n"
                       "1) Only One Song.\n"
                       "2) A Playlist.\n"
                       "3) A list of songs.\n"
