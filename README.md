@@ -5,7 +5,9 @@ spotify-downloader by ritiek must be installed for this script to work. <br />
 spotify-downloader can be installed via pip with: <br />
 ```$ pip3 install spotdl```
 # Usage
-Run the script and enter the data that is asked.
+Run the script and enter the data that is asked. <br/>
 
 # Note
-This script might need some optimisations, Please report bugs.
+This script might need some optimisations, Please report bugs.<br/>
+<br/>
+**Python 3.6+ is required for this script to work.**
