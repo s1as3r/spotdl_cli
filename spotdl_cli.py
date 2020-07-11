@@ -3,8 +3,6 @@ import sys
 
 
 def song():
-    link = input("Enter the song link or enter song name: ")
-    
     log = input("Log Level (INFO/DEBUG) = ")
     if log.lower() not in ("info", "debug"):
         print("Invalid Option Selected.")
@@ -45,7 +43,6 @@ def song():
 
 
 def playlist():
-    link = input("Enter the playlist link: ")
     log = input("Log Level (INFO/DEBUG) = ")
     
     if_output = input("Manual output directory(y/n)?: ")
@@ -65,29 +62,24 @@ def textlist():
     system(f"spotdl -l {path} --log-level={log.upper()}")
 
 
-def main():
-    selection = input("What do you want to download:\n"
-                      "1) Only One Song.\n"
-                      "2) A Playlist.\n"
-                      "3) A list of songs.\n"
-                      "Selcet an Option (1/2/3): ")
-    if selection == "1":
+def scan():
+    if "spotify.com/track" in link.lower():
         song()
-    elif selection == "2":
+    elif "spotify.com/playlist" in link.lower():
         playlist()
-    elif selection == "3":
-        textlist()
     else:
-        print("Invalid Option Selected.")
-        sys.exit()
+        song()
 
-    again = input("Download Again?(Y/N) ")
-    if again.lower() == 'n':
-        print("Exiting Now.")
-    elif again.lower() == 'y':
-        main()
-    else:
-        print("Incorrect Option Selected, Exiting Now.")
-        sys.exit()
+selection = input("What do you want to download:\n"
+                      "1) A Song or Playlsit.\n"
+                      "2) A List of Songs.\n"
+                      "Selcet an Option (1/2): ")
+    
 
-main()
+if selection == "1":
+    link = input("Enter the song link or enter song name: ")
+    scan()
+elif selection == "2":
+    textlist()
+else:
+    print("Invalid Option Selected.")
