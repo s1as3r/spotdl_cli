@@ -33,7 +33,7 @@ def scan():
 def main():
     global link
     type = input("1) Simple Usage.\n"
-                "2) Manula (Advanced) Usage.\n"
+                "2) Manual (Advanced) Usage.\n"
                 "Selcet an Option (1/2): ")
     if type == '1':
         link = input("Enter A Song/playlist/album link or Enter the path to a list:\n")
