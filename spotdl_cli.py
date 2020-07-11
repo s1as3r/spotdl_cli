@@ -16,8 +16,7 @@ def playlist():
     system(f"spotdl -l playlist.txt")
 
 def textlist():
-    path = str(input("Enter the Path to the list: "))
-    system(f"spotdl -l {path}")
+    system(f"spotdl -l {link}")
 
 
 def scan():
@@ -25,28 +24,24 @@ def scan():
         song()
     elif "spotify.com/playlist" in link.lower():
         playlist()
+    elif ".txt" in link.lower():
+        textlist()
     elif "spotify.com/album" in link.lower():
         album()
     else:
         song()
-
-type = input("1) Simple Usage.\n"
-             "2) Manula (Advanced) Usage.\n"
-             "Selcet an Option (1/2): ")
-if type == '1':
-    selection = input("What do you want to download:\n"
-                      "1) A Song or Playlsit.\n"
-                      "2) A List of Songs.\n"
-                      "Selcet an Option (1/2): ")
-
-    if selection == "1":
-        link = input("Enter the song link or enter song name: ")
+def main():
+    global link
+    type = input("1) Simple Usage.\n"
+                "2) Manula (Advanced) Usage.\n"
+                "Selcet an Option (1/2): ")
+    if type == '1':
+        link = input("Enter A Song/playlist/album link or Enter the path to a list:\n")
         scan()
-    elif selection == "2":
-        textlist()
+    elif type == '2':
+        adv.main()
     else:
-        print("Invalid Option Selected.")
-elif type == '2':
-    adv.main()
-else:
-    print("Invalid Input")
+        print("Invalid Input")
+
+if __name__ == '__main__':
+    main()
