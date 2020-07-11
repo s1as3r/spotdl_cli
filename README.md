@@ -13,7 +13,7 @@ The script will automatically detect and download the entered song/list/playlist
 <br/>
 The **Manual(Advanced)** Mode has more Options to choose from. Like Downloading songs in a different file type. 
 # Note
-This script might need some optimisations, Please report bugs.<br/>
-While using Simple Mode, The songs will be downloaded to the location from where the script is run.
+**1** This script might need some optimisations, Please report bugs.<br/>
+**2** While using Simple Mode, The songs will be downloaded to the location from where the script is run.<br/>
 <br/>
 **:exclamation:Python 3.6+ is required for this script to work.**
