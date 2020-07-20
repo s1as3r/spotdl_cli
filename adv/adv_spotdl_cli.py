@@ -19,10 +19,10 @@ def song():
 
         if_search = input("Manual Search String (y/n): ")
         if if_search.lower() == 'n':
-            system(f"spotdl -s {link} -f {output} -ll={log.upper()} -o {filetype}")
+            system(f"spotdl -s {link} -f {output} -ll={log} -o {filetype}")
         elif if_search.lower() == 'y':
             search = input("Enter the search string: ")
-            system(f"spotdl -s {link} -f {output} -ll={log.upper()} -sf{search} -o {filetype}")
+            system(f"spotdl -s {link} -f {output} -ll={log} -sf{search} -o {filetype}")
         else:
             print("Invalid Option Selected.")
             sys.exit()
@@ -30,10 +30,10 @@ def song():
     elif if_output.lower() == 'n':
         if_search = input("Manual Search String (y/n): ")
         if if_search.lower() == 'n':
-            system(f"spotdl -s {link} -ll={log.upper()}")
+            system(f"spotdl -s {link} -ll={log}")
         elif if_search.lower() == 'y':
             search = input("Enter the search string: ")
-            system(f"spotdl -s {link} -ll={log.upper()} -sf {search}")
+            system(f"spotdl -s {link} -ll={log} -sf {search}")
         else:
             print("Invalid Option Selected..")
             sys.exit()
@@ -48,9 +48,9 @@ def album():
     if_output = input("Manual output directory(y/n)?: ")
     if if_output.lower() == 'y':
         output = input("Enter The Output Directory: ")
-        system(f"spotdl -a {link} -ll={log.upper()} -f {output}")
+        system(f"spotdl -a {link} -ll={log} -f {output}")
     elif if_output.lower() == 'n':
-        system(f"spotdl -a {link} -ll={log.upper()}")
+        system(f"spotdl -a {link} -ll={log}")
     else:
         print("Invalid Option Selected..")
         sys.exit()
@@ -62,9 +62,9 @@ def playlist():
     if_output = input("Manual output directory(y/n)?: ")
     if if_output.lower() == 'y':
         output = input("Enter The Output Directory: ")
-        system(f"spotdl -p {link} -ll={log.upper()} -f {output}")
+        system(f"spotdl -p {link} -ll={log} -f {output}")
     elif if_output.lower() == 'n':
-        system(f"spotdl -p {link} -ll={log.upper()}")
+        system(f"spotdl -p {link} -ll={log}")
     else:
         print("Invalid Option Selected..")
         sys.exit()
@@ -73,7 +73,7 @@ def playlist():
 def textlist():
     path = str(input("Enter the Path to the list: "))
     log = input("Log Level (INFO/DEBUG): ")
-    system(f"spotdl -l {path} -ll={log.upper()}")
+    system(f"spotdl -l {path} -ll={log}")
 
 
 def scan():
