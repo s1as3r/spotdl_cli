@@ -1,7 +1,7 @@
 # spotdl_cli
 An interactive CLI Script for [spotdl](https://github.com/ritiek/spotify-downloader). <br />
 This is a simple python script for spotify downloader by [ritiek](https://github.com/ritiek). <br />
-<br/>
+
 # Usage
 Run spotdl_cli.py. <br/>
 <br/>
