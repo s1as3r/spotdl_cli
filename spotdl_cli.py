@@ -1,11 +1,14 @@
 from os import system
 import adv.adv_spotdl_cli as adv
 
+
 try:
     import spotdl
 except:
-    print('spotdl not found, downloading now.')
-    system('pip installl -U spotdl')
+    if input("Spotdl not found, download now? (y/n)").lower() == 'y':
+        system('pip install -U spotdl')
+    else:
+        sys.exit()
 
 def song():
     system(f"spotdl -s {link}")
