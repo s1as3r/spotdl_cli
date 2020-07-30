@@ -1,30 +1,53 @@
-from os import system
-import adv.adv_spotdl_cli as adv
+import sys
+from threading import Thread
+
+from spotdl import Spotdl, util
+from spotdl.helpers.spotify import SpotifyHelpers
+
+from adv import adv_spotdl_cli as adv
+
+helper_instance = SpotifyHelpers()
+spotdl_instance = Spotdl()
 
 
-try:
-    import spotdl
-except:
-    if input("Spotdl not found, download now? (y/n)").lower() == 'y':
-        system('pip install -U spotdl')
-    else:
-        sys.exit()
+def logs():
+    print(util.install_logger(level='INFO'))
+
+log = Thread(target=logs)
 
 def song():
-    system(f"spotdl -s {link}")
-
+    log.start()
+    def download():
+        spotdl_instance.download_track(link)
+    downloader = Thread(target=download)
+    downloader.start()
+    
 
 def album():
-    system(f"spotdl -a {link} --write-to=list.txt")
-    system(f"spotdl -l list.txt")
-
+    log.start()
+    alb = helper_instance.fetch_album(link)
+    helper_instance.write_album_tracks(alb, './album_tracks.txt')
+    def download():
+        spotdl_instance.download_tracks_from_file('album_tracks.txt')
+    downloader = Thread(target=download)
+    downloader.start()
 
 def playlist():
-    system(f"spotdl -p {link} --write-to=playlist.txt")
-    system(f"spotdl -l playlist.txt")
+    log.start()
+    playlist = helper_instance.fetch_playlist(link)
+    helper_instance.write_playlist_tracks(playlist, '.\playlist_tracks.txt')
+    def download():
+        spotdl_instance.download_tracks_from_file('playlist_tracks.txt')
+    downloader = Thread(target=download)
+    downloader.start()
 
 def textlist():
-    system(f"spotdl -l {link}")
+    log.start()
+    def download():
+        spotdl_instance.download_tracks_from_file(link)
+    downloader = Thread(target=download)
+    downloader.start()
+
 
 
 def scan():
@@ -38,6 +61,7 @@ def scan():
         album()
     else:
         song()
+
 def main():
     global link
     type = input("1) Simple Usage.\n"

@@ -1,79 +1,58 @@
-from os import system
 import sys
+from threading import Thread
+
+from spotdl import Spotdl, util
+from spotdl.helpers.spotify import SpotifyHelpers
+
+
+helper_instance = SpotifyHelpers()
+
+
+def logs():
+    print(util.install_logger(level=log_level.upper()))
+
+
+log = Thread(target=logs)
 
 
 def song():
-    log = input("Log Level (INFO/DEBUG) = ")
-    if log.lower() not in ("info", "debug"):
-        print("Invalid Option Selected.")
-        sys.exit()
+    log.start()
 
-    filetype = input("Output File Type? (m4a,ogg,mp3,opus,flac): ")
-    if filetype.lower() not in ('m4a', 'ogg', 'mp3', 'opus', 'flac'):
-        print("Invalid File Format Selected.")
-        sys.exit()
-
-    if_output = input("Manual output directory(y/n)?: ")
-    if if_output.lower() == 'y':
-        output = input("Enter The Output Directory: ")
-
-        if_search = input("Manual Search String (y/n): ")
-        if if_search.lower() == 'n':
-            system(f"spotdl -s {link} -f {output} -ll={log} -o {filetype}")
-        elif if_search.lower() == 'y':
-            search = input("Enter the search string: ")
-            system(f"spotdl -s {link} -f {output} -ll={log} -sf{search} -o {filetype}")
-        else:
-            print("Invalid Option Selected.")
-            sys.exit()
-
-    elif if_output.lower() == 'n':
-        if_search = input("Manual Search String (y/n): ")
-        if if_search.lower() == 'n':
-            system(f"spotdl -s {link} -ll={log}")
-        elif if_search.lower() == 'y':
-            search = input("Enter the search string: ")
-            system(f"spotdl -s {link} -ll={log} -sf {search}")
-        else:
-            print("Invalid Option Selected..")
-            sys.exit()
-    else:
-        print("Invalid Option Selected..")
-        sys.exit()
+    def download():
+        spotdl_instance.download_track(link)
+    downloader = Thread(target=download)
+    downloader.start()
 
 
 def album():
-    log = input("Log Level (INFO/DEBUG) = ")
+    log.start()
+    alb = helper_instance.fetch_album(link)
+    helper_instance.write_album_tracks(alb, './album_tracks.txt')
 
-    if_output = input("Manual output directory(y/n)?: ")
-    if if_output.lower() == 'y':
-        output = input("Enter The Output Directory: ")
-        system(f"spotdl -a {link} -ll={log} -f {output}")
-    elif if_output.lower() == 'n':
-        system(f"spotdl -a {link} -ll={log}")
-    else:
-        print("Invalid Option Selected..")
-        sys.exit()
+    def download():
+        spotdl_instance.download_tracks_from_file('album_tracks.txt')
+    downloader = Thread(target=download)
+    downloader.start()
 
 
 def playlist():
-    log = input("Log Level (INFO/DEBUG) = ")
+    log.start()
+    playlist = helper_instance.fetch_playlist(link)
+    helper_instance.write_playlist_tracks(playlist, '.\playlist_tracks.txt')
 
-    if_output = input("Manual output directory(y/n)?: ")
-    if if_output.lower() == 'y':
-        output = input("Enter The Output Directory: ")
-        system(f"spotdl -p {link} -ll={log} -f {output}")
-    elif if_output.lower() == 'n':
-        system(f"spotdl -p {link} -ll={log}")
-    else:
-        print("Invalid Option Selected..")
-        sys.exit()
+    def download():
+        spotdl_instance.download_tracks_from_file('playlist_tracks.txt')
+    downloader = Thread(target=download)
+    downloader.start()
 
 
 def textlist():
-    path = str(input("Enter the Path to the list: "))
-    log = input("Log Level (INFO/DEBUG): ")
-    system(f"spotdl -l {path} -ll={log}")
+    log.start()
+
+    def download():
+        spotdl_instance.download_tracks_from_file(link)
+    downloader = Thread(target=download)
+    downloader.start()
 
 
 def scan():
@@ -86,21 +65,38 @@ def scan():
     else:
         song()
 
+
 def main():
     global link
-    selection = input("What do you want to download:\n"
-                      "1) A Song or Playlsit.\n"
-                      "2) A List of Songs.\n"
-                      "Selcet an Option (1/2): ")
+    global spotdl_instance
+    global log_level
 
+    log_level = input('Log Level (INFO/DEBUG/ERROR/WARNING) = ')
+    if log_level.lower() not in ['info', 'error', 'debug', 'warning']:
+        log_level = 'INFO'
 
-    if selection == "1":
-        link = input("Enter the song link or enter song name: ")
-        scan()
-    elif selection == "2":
-        textlist()
+    output_ext = input('Output Format (m4a,flac,mp3,opus,ogg) = ')
+    if output_ext.lower() not in ['m4a', 'flac', 'mp3', 'opus', 'ogg']:
+        output_ext = 'mp3'
+
+    if input('Manual Search String? (y/n): ').lower() == 'y':
+        search_format = input('Enter Manual Search String: ')
     else:
-        print("Invalid Option Selected.")
+        search_format = '{artist} - {track-name} lyrics'
 
-if __name__ == "__main__":
+    if input('Manual Output Directory? (y/n): ').lower() == 'y':
+        output_file = input("Enter Path to the Directory: ")
+    else:
+        output_file = '{artist} - {track-name}.{output_ext}'
+
+    spotdl_instance = Spotdl(args={'output_ext': output_ext,
+                                   'search_format': search_format,
+                                   'output_file': output_file})
+
+    link = input("Enter the song/playlist/album link or path to a textlist: ")
+
+    scan()
+
+
+if __name__ == '__main__':
     main()
