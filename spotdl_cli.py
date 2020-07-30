@@ -1,5 +1,14 @@
 import sys
+from os import system
 from threading import Thread
+
+try:
+    import spotdl
+except:
+    if input("spotdl not found, Download Now? (y/n): ").lower() == 'y':
+        system('pip install -U spotdl')
+    else:
+        sys.exit()
 
 from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
