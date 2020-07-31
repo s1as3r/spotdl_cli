@@ -1,6 +1,6 @@
 import sys
-from os import system
 from threading import Thread
+from os import system
 
 try:
     import spotdl
@@ -9,54 +9,62 @@ except:
         system('pip install -U spotdl')
     else:
         sys.exit()
-
+from spotdl.authorize.services import AuthorizeSpotify
 from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
 
 from adv import adv_spotdl_cli as adv
 
-helper_instance = SpotifyHelpers()
+helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(client_id='4fe3fecfe5334023a1472516cc99d805',
+                                                          client_secret='0f02b7c483c04257984695007a4a8d5c'))
 spotdl_instance = Spotdl()
 
 
 def logs():
     print(util.install_logger(level='INFO'))
 
+
 log = Thread(target=logs)
+
 
 def song():
     log.start()
+
     def download():
         spotdl_instance.download_track(link)
     downloader = Thread(target=download)
     downloader.start()
-    
+
 
 def album():
     log.start()
     alb = helper_instance.fetch_album(link)
     helper_instance.write_album_tracks(alb, './album_tracks.txt')
+
     def download():
         spotdl_instance.download_tracks_from_file('album_tracks.txt')
     downloader = Thread(target=download)
     downloader.start()
 
+
 def playlist():
     log.start()
     playlist = helper_instance.fetch_playlist(link)
     helper_instance.write_playlist_tracks(playlist, '.\playlist_tracks.txt')
+
     def download():
         spotdl_instance.download_tracks_from_file('playlist_tracks.txt')
     downloader = Thread(target=download)
     downloader.start()
 
+
 def textlist():
     log.start()
+
     def download():
         spotdl_instance.download_tracks_from_file(link)
     downloader = Thread(target=download)
     downloader.start()
-
 
 
 def scan():
@@ -71,18 +79,21 @@ def scan():
     else:
         song()
 
+
 def main():
     global link
     type = input("1) Simple Usage.\n"
-                "2) Manual (Advanced) Usage.\n"
-                "Selcet an Option (1/2): ")
+                 "2) Manual (Advanced) Usage.\n"
+                 "Selcet an Option (1/2): ")
     if type == '1':
-        link = input("Enter A Song/playlist/album link or Enter the path to a list:\n")
+        link = input(
+            "Enter A Song/playlist/album link or Enter the path to a list:\n")
         scan()
     elif type == '2':
         adv.main()
     else:
         print("Invalid Input")
+
 
 if __name__ == '__main__':
     main()
