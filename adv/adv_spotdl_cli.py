@@ -1,12 +1,14 @@
 import sys
 from threading import Thread
 
+from spotdl_cli import u_client_id, u_client_secret
+
 from spotdl.authorize.services import AuthorizeSpotify
 from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
 
-helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(client_id='4fe3fecfe5334023a1472516cc99d805',
-                                                          client_secret='0f02b7c483c04257984695007a4a8d5c'))
+helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(client_id=u_client_id,
+                                                          client_secret=u_client_secret))
 
 
 def logs():
