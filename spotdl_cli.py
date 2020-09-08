@@ -10,7 +10,7 @@ except:
     else:
         sys.exit()
         
-from adv import adv_spotdl_cli as adv
+import adv_spotdl_cli as adv
 
 from spotdl.authorize.services import AuthorizeSpotify
 from spotdl import Spotdl, util
