@@ -3,6 +3,7 @@ An interactive CLI Script for [spotdl](https://github.com/ritiek/spotify-downloa
 This is a simple python script for spotify downloader by [ritiek](https://github.com/ritiek). <br />
 
 # Usage
+Obtain your API Keys from the [Developer Dashboard](https://developer.spotify.com/dashboard/applications)<br/>
 Run spotdl_cli.py. <br/>
 <br/>
 For Simple Usage Enter 1 and then enter the link to a song/playlist/album or enter a song name or the path to a list of songs.<br/>
