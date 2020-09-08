@@ -10,8 +10,6 @@ except:
     else:
         sys.exit()
         
-import adv_spotdl_cli as adv
-
 from spotdl.authorize.services import AuthorizeSpotify
 from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
@@ -149,7 +147,7 @@ def main():
             "Enter A Song/playlist/album link or Enter the path to a list:\n")
         scan()
     elif type == '2':
-        adv.main()
+        __import__('adv_spotdl_cli').main()
     else:
         print("Invalid Input")
 
