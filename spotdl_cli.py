@@ -9,14 +9,14 @@ except:
         system('pip install -U spotdl')
     else:
         sys.exit()
-        
+
 from spotdl.authorize.services import AuthorizeSpotify
 from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
 
 
 
-class bcolors:
+class BColors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
@@ -44,16 +44,16 @@ try:
             try:
                 u_client_id = contents[0]
                 u_client_secret = contents[1]
-                print(bcolors.OKGREEN + "Success: Found local spotify keys!" + bcolors.ENDC)
+                print(BColors.OKGREEN + "Success: Found local spotify keys!" + BColors.ENDC)
             except IndexError:
                 raise FileNotFoundError
         else:
             raise FileNotFoundError
-            
+
 except FileNotFoundError:
     # If keys are not found, allow the user to obtain the keys from spotify
-    print(bcolors.WARNING + "Warning: You are missing the client_id/secret which is required for the album/playlist features" + bcolors.ENDC)
-    print(bcolors.WARNING + "You can obtain these keys by creating a quick app with Spotify" + bcolors.ENDC)
+    print(BColors.WARNING + "Warning: You are missing the client_id/secret which is required for the album/playlist features" + BColors.ENDC)
+    print(BColors.WARNING + "You can obtain these keys by creating a quick app with Spotify" + BColors.ENDC)
     print("https://developer.spotify.com/dashboard/applications\n")
 
     # User is able to proceed without keys, which will limit some features
@@ -66,10 +66,11 @@ except FileNotFoundError:
         # Keys will be saved for the future in a local text file
         with open("spotify_keys.txt", "w") as keys:
             keys.writelines([u_client_id + "\n", u_client_secret])
-        print(bcolors.OKGREEN + "Success: Your keys were saved for future use!" + bcolors.ENDC)
-        
+        print(BColors.OKGREEN + "Success: Your keys were saved for future use!" + BColors.ENDC)
+
     else:
-        print(bcolors.WARNING + "Warning: Without keys some features may not work as expected!" + bcolors.ENDC)
+        print(BColors.WARNING + "Warning: Cannot proceed without the keys! Exiting Now..." + BColors.ENDC)
+        sys.exit()
 except:
     raise
 
