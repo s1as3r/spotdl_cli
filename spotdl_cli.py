@@ -15,7 +15,6 @@ from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
 
 
-
 class BColors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -40,11 +39,12 @@ try:
     with open("spotify_keys.txt", "r+") as keys:
         contents = keys.readlines()
         if contents:
-            contents = [key.strip() for key in contents] # Removal of newlines
+            contents = [key.strip() for key in contents]  # Removal of newlines
             try:
                 u_client_id = contents[0]
                 u_client_secret = contents[1]
-                print(BColors.OKGREEN + "Success: Found local spotify keys!" + BColors.ENDC)
+                print(BColors.OKGREEN +
+                      "Success: Found local spotify keys!" + BColors.ENDC)
             except IndexError:
                 raise FileNotFoundError
         else:
@@ -53,7 +53,8 @@ try:
 except FileNotFoundError:
     # If keys are not found, allow the user to obtain the keys from spotify
     print(BColors.WARNING + "Warning: You are missing the client_id/secret which is required for the album/playlist features" + BColors.ENDC)
-    print(BColors.WARNING + "You can obtain these keys by creating a quick app with Spotify" + BColors.ENDC)
+    print(BColors.WARNING +
+          "You can obtain these keys by creating a quick app with Spotify" + BColors.ENDC)
     print("https://developer.spotify.com/dashboard/applications\n")
 
     # User is able to proceed without keys, which will limit some features
@@ -66,15 +67,18 @@ except FileNotFoundError:
         # Keys will be saved for the future in a local text file
         with open("spotify_keys.txt", "w") as keys:
             keys.writelines([u_client_id + "\n", u_client_secret])
-        print(BColors.OKGREEN + "Success: Your keys were saved for future use!" + BColors.ENDC)
+        print(BColors.OKGREEN +
+              "Success: Your keys were saved for future use!" + BColors.ENDC)
 
     else:
-        print(BColors.WARNING + "Warning: Cannot proceed without the keys! Exiting Now..." + BColors.ENDC)
+        print(BColors.WARNING +
+              "Warning: Cannot proceed without the keys! Exiting Now..." + BColors.ENDC)
         sys.exit()
 except:
     raise
 
-helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(client_id=u_client_id, client_secret=u_client_secret))
+helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(
+    client_id=u_client_id, client_secret=u_client_secret))
 spotdl_instance = Spotdl()
 
 
@@ -140,17 +144,28 @@ def scan():
 
 def main():
     global link
-    type = input("1) Simple Usage.\n"
-                 "2) Manual (Advanced) Usage.\n"
-                 "Selcet an Option (1/2): ")
+    system('cls')
+    print(
+        """
+     ======================================================
+    |                                                      |
+    |   1) Simple Usage.     2) Manual (Advanced) Usage.   |
+    |                                                      |
+     ======================================================
+    """
+    )
+    type = input("Selcet an Option (1/2): ")
     if type == '1':
+        system('cls')
         link = input(
             "Enter A Song/playlist/album link or Enter the path to a list:\n")
         scan()
     elif type == '2':
+        system('cls')
         __import__('adv_spotdl_cli').main()
     else:
         print("Invalid Input")
+        sys.exit()
 
 
 if __name__ == '__main__':
