@@ -14,17 +14,13 @@ with open("spotify_keys.txt", "r+") as keys:
 
 helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(
     client_id=u_client_id, client_secret=u_client_secret))
-log_level, output_ext = 'INFO', 'mp3'  # Set Default Log Level and Output Format
 
 
-def logs():
+def logs(log_level):
     print(util.install_logger(level=log_level.upper()))
 
 
-log = Thread(target=logs)
-
-
-def song(link):
+def song(link, log):
     log.start()
 
     def download():
@@ -34,7 +30,7 @@ def song(link):
     downloader.start()
 
 
-def album(link):
+def album(link, log):
     log.start()
     alb = helper_instance.fetch_album(link)
     helper_instance.write_album_tracks(alb, './album_tracks.txt')
@@ -46,7 +42,7 @@ def album(link):
     downloader.start()
 
 
-def playlist(link):
+def playlist(link, log):
     log.start()
     playlist = helper_instance.fetch_playlist(link)
     helper_instance.write_playlist_tracks(playlist, '.\playlist_tracks.txt')
@@ -58,7 +54,7 @@ def playlist(link):
     downloader.start()
 
 
-def textlist(directory):
+def textlist(directory, log):
     log.start()
 
     def download():
@@ -68,23 +64,20 @@ def textlist(directory):
     downloader.start()
 
 
-def scan(link):
+def scan(link, log):
     if "spotify.com/track" in link.lower():
-        song(link)
+        song(link, log)
     elif "spotify.com/playlist" in link.lower():
-        playlist(link)
+        playlist(link, log)
     elif "spotify.com/album" in link.lower():
-        album(link)
+        album(link, log)
     elif ".txt" in link.lower():
-        textlist(link)
+        textlist(link, log)
     else:
-        song(link)
+        song(link, log)
 
 
-def select():
-    global log_level
-    global output_ext
-
+def select(output_ext, log_level):
     os.system('cls')
 
     print(
@@ -103,14 +96,14 @@ def select():
 
 def main():
     global spotdl_instance
-    global log_level
-    global output_ext
 
     search_format = '{artist} - {track-name} lyrics'
+    log_level = 'INFO'
+    output_ext = 'mp3'
     output_file = os.getcwd()
     again = 'Y'
     while again == 'Y':
-        selection = select()
+        selection = select(output_ext, log_level)
         if selection == '1':
             os.system('cls')
             log_level = input('Log Level (INFO/DEBUG/ERROR/WARNING) = ')
@@ -159,7 +152,8 @@ def main():
                                    'output_file': output_file})
 
     os.system('cls')
-    scan(input("Enter the song/playlist/album link or path to a textlist: "))
+    log = Thread(target=logs, kwargs={'log_level':log_level})
+    scan(input("Enter the song/playlist/album link or path to a textlist: "), log)
 
 
 if __name__ == '__main__':

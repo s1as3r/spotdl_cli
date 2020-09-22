@@ -1,6 +1,6 @@
+from os import system
 import sys
 from threading import Thread
-from os import system
 
 try:
     import spotdl
@@ -89,62 +89,66 @@ def logs():
 log = Thread(target=logs)
 
 
-def song():
+def song(link):
     log.start()
 
     def download():
         spotdl_instance.download_track(link)
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def album():
+def album(link):
     log.start()
     alb = helper_instance.fetch_album(link)
     helper_instance.write_album_tracks(alb, './album_tracks.txt')
 
     def download():
         spotdl_instance.download_tracks_from_file('album_tracks.txt')
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def playlist():
+def playlist(link):
     log.start()
     playlist = helper_instance.fetch_playlist(link)
     helper_instance.write_playlist_tracks(playlist, '.\playlist_tracks.txt')
 
     def download():
         spotdl_instance.download_tracks_from_file('playlist_tracks.txt')
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def textlist():
+def textlist(directory):
     log.start()
 
     def download():
-        spotdl_instance.download_tracks_from_file(link)
+        spotdl_instance.download_tracks_from_file(directory)
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def scan():
+def scan(link):
     if "spotify.com/track" in link.lower():
-        song()
+        song(link)
     elif "spotify.com/playlist" in link.lower():
-        playlist()
+        playlist(link)
     elif ".txt" in link.lower():
-        textlist()
+        textlist(link)
     elif "spotify.com/album" in link.lower():
-        album()
+        album(link)
     else:
-        song()
+        song(link)
 
 
 def main():
-    global link
     system('cls')
+
     print(
         """
      ======================================================
@@ -154,12 +158,13 @@ def main():
      ======================================================
     """
     )
+
     type = input("Selcet an Option (1/2): ")
+
     if type == '1':
         system('cls')
-        link = input(
-            "Enter A Song/playlist/album link or Enter the path to a list:\n")
-        scan()
+        scan(input(
+            "Enter A Song/playlist/album link or Enter the path to a list:\n"))
     elif type == '2':
         system('cls')
         __import__('adv_spotdl_cli').main()
