@@ -1,6 +1,6 @@
+from os import system
 import sys
 from threading import Thread
-from os import system
 
 try:
     import spotdl
@@ -13,7 +13,6 @@ except:
 from spotdl.authorize.services import AuthorizeSpotify
 from spotdl import Spotdl, util
 from spotdl.helpers.spotify import SpotifyHelpers
-
 
 
 class BColors:
@@ -40,11 +39,12 @@ try:
     with open("spotify_keys.txt", "r+") as keys:
         contents = keys.readlines()
         if contents:
-            contents = [key.strip() for key in contents] # Removal of newlines
+            contents = [key.strip() for key in contents]  # Removal of newlines
             try:
                 u_client_id = contents[0]
                 u_client_secret = contents[1]
-                print(BColors.OKGREEN + "Success: Found local spotify keys!" + BColors.ENDC)
+                print(BColors.OKGREEN +
+                      "Success: Found local spotify keys!" + BColors.ENDC)
             except IndexError:
                 raise FileNotFoundError
         else:
@@ -53,7 +53,8 @@ try:
 except FileNotFoundError:
     # If keys are not found, allow the user to obtain the keys from spotify
     print(BColors.WARNING + "Warning: You are missing the client_id/secret which is required for the album/playlist features" + BColors.ENDC)
-    print(BColors.WARNING + "You can obtain these keys by creating a quick app with Spotify" + BColors.ENDC)
+    print(BColors.WARNING +
+          "You can obtain these keys by creating a quick app with Spotify" + BColors.ENDC)
     print("https://developer.spotify.com/dashboard/applications\n")
 
     # User is able to proceed without keys, which will limit some features
@@ -66,15 +67,18 @@ except FileNotFoundError:
         # Keys will be saved for the future in a local text file
         with open("spotify_keys.txt", "w") as keys:
             keys.writelines([u_client_id + "\n", u_client_secret])
-        print(BColors.OKGREEN + "Success: Your keys were saved for future use!" + BColors.ENDC)
+        print(BColors.OKGREEN +
+              "Success: Your keys were saved for future use!" + BColors.ENDC)
 
     else:
-        print(BColors.WARNING + "Warning: Cannot proceed without the keys! Exiting Now..." + BColors.ENDC)
+        print(BColors.WARNING +
+              "Warning: Cannot proceed without the keys! Exiting Now..." + BColors.ENDC)
         sys.exit()
 except:
     raise
 
-helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(client_id=u_client_id, client_secret=u_client_secret))
+helper_instance = SpotifyHelpers(spotify=AuthorizeSpotify(
+    client_id=u_client_id, client_secret=u_client_secret))
 spotdl_instance = Spotdl()
 
 
@@ -85,72 +89,88 @@ def logs():
 log = Thread(target=logs)
 
 
-def song():
+def song(link):
     log.start()
 
     def download():
         spotdl_instance.download_track(link)
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def album():
+def album(link):
     log.start()
     alb = helper_instance.fetch_album(link)
     helper_instance.write_album_tracks(alb, './album_tracks.txt')
 
     def download():
         spotdl_instance.download_tracks_from_file('album_tracks.txt')
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def playlist():
+def playlist(link):
     log.start()
     playlist = helper_instance.fetch_playlist(link)
     helper_instance.write_playlist_tracks(playlist, '.\playlist_tracks.txt')
 
     def download():
         spotdl_instance.download_tracks_from_file('playlist_tracks.txt')
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def textlist():
+def textlist(directory):
     log.start()
 
     def download():
-        spotdl_instance.download_tracks_from_file(link)
+        spotdl_instance.download_tracks_from_file(directory)
+
     downloader = Thread(target=download)
     downloader.start()
 
 
-def scan():
+def scan(link):
     if "spotify.com/track" in link.lower():
-        song()
+        song(link)
     elif "spotify.com/playlist" in link.lower():
-        playlist()
+        playlist(link)
     elif ".txt" in link.lower():
-        textlist()
+        textlist(link)
     elif "spotify.com/album" in link.lower():
-        album()
+        album(link)
     else:
-        song()
+        song(link)
 
 
 def main():
-    global link
-    type = input("1) Simple Usage.\n"
-                 "2) Manual (Advanced) Usage.\n"
-                 "Selcet an Option (1/2): ")
+    system('cls')
+
+    print(
+        """
+     ======================================================
+    |                                                      |
+    |   1) Simple Usage.     2) Manual (Advanced) Usage.   |
+    |                                                      |
+     ======================================================
+    """
+    )
+
+    type = input("Selcet an Option (1/2): ")
+
     if type == '1':
-        link = input(
-            "Enter A Song/playlist/album link or Enter the path to a list:\n")
-        scan()
+        system('cls')
+        scan(input(
+            "Enter A Song/playlist/album link or Enter the path to a list:\n"))
     elif type == '2':
+        system('cls')
         __import__('adv_spotdl_cli').main()
     else:
         print("Invalid Input")
+        sys.exit()
 
 
 if __name__ == '__main__':
