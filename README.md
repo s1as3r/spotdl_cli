@@ -1,5 +1,5 @@
 # spotdl_cli
-### Obsolete
+### :exclamation: Obsolete
 After [spotDL v3 rework](https://github.com/spotDL/spotify-downloader/pull/812), this script will not work. And there's no need for a script like this now, because v3 is easier to use than this cli.
 
 An interactive CLI Script for [spotdl](https://github.com/ritiek/spotify-downloader). <br />
